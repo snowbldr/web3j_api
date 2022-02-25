@@ -1,0 +1,19 @@
+version: '2.2'
+
+volumes:
+  oeth_kovan:
+    external: true
+    name: oeth_kovan
+
+services:
+  oeth:
+    image: openethereum/openethereum:v3.3.4
+    command: --jsonrpc-interface all --chain kovan --pruning fast --base-path /home/openethereum/.local/share/openethereum
+    volumes:
+      - oeth_kovan:/home/openethereum/.local/share/openethereum
+    ports:
+      - "8545:8545"
+      - "8546:8546"
+      - "30303:30303"
+      - "30303:30303/udp"
+    restart: always
