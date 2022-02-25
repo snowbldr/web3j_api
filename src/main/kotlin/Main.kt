@@ -1,4 +1,3 @@
-
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.snowbldr.jankyhttp.Body
 import com.github.snowbldr.jankyhttp.JankyHttpServer
@@ -12,6 +11,7 @@ import org.web3j.tx.Transfer
 import org.web3j.utils.Convert
 import java.math.BigDecimal
 import java.math.BigInteger
+import kotlin.math.pow
 
 val web3j: Web3j = Web3j.build(HttpService("https://kovan.poa.network"))
 
@@ -31,7 +31,10 @@ fun main() {
                             req.path.split("/balance/")[1],
                             DefaultBlockParameter.valueOf(lastBlock())
                         )
-                            .send().balance.toString()
+                            .send().balance.toBigDecimal()
+                            //eth has 18 decimal places
+                            .divide(BigDecimal.valueOf(10.0.pow(18.0)))
+                            .toString()
                     )
                 )
             req.path == "/wallet/new" -> req.reply(
